@@ -12,11 +12,12 @@ int main() {
 	bool** neighbors = new bool*[3]; //6x3
 	ZuulRoom** zuulRooms = new ZuulRoom*[3];//6x3
 	bool gameWon = false;
+	ZuulItem* test = new ZuulItem;
 	ZuulItem* inventory = new ZuulItem[6];//6
 
 	system("clear");
 	for (int i = 0; i < 6; i++) {
-		inventory[i] = new ZuulItem();
+		inventory[i] = new ZuulItem("Lol", "XDDD", "Sup");
 	}
 	createRooms(zuulRooms);
 
@@ -49,9 +50,9 @@ void printMap(bool** inRoom){
 			
 		}
 	}
-	std::cout<< endl
-	<< '[' <<inRoom[0][0] << ']' << '[' <<inRoom[1][0] << ']' << '[' <<inRoom[2][0] << ']' << '[' << inRoom[3][0] << ']' << '[' <<inRoom[4][0] << ']' << '[' <<inRoom[5][0] << ']' << endl
-	<< '[' <<inRoom[0][1] << ']' << '[' <<inRoom[1][1] << ']' << '[' <<inRoom[2][1] << ']' << '[' << inRoom[3][1] << ']' << '[' <<inRoom[4][1] << ']' << '[' <<inRoom[5][1] << ']' << endl
+	std::cout<< "\n"
+	<< '[' <<inRoom[0][0] << ']' << '[' <<inRoom[1][0] << ']' << '[' <<inRoom[2][0] << ']' << '[' << inRoom[3][0] << ']' << '[' <<inRoom[4][0] << ']' << '[' <<inRoom[5][0] << ']' << "\n"
+	<< '[' <<inRoom[0][1] << ']' << '[' <<inRoom[1][1] << ']' << '[' <<inRoom[2][1] << ']' << '[' << inRoom[3][1] << ']' << '[' <<inRoom[4][1] << ']' << '[' <<inRoom[5][1] << ']' << "\n"
 	<< '[' <<inRoom[0][2] << ']' << '[' <<inRoom[1][2] << ']' << '[' <<inRoom[2][2] << ']' << '[' << inRoom[3][2] << ']' << '[' <<inRoom[4][2] << ']' << '[' <<inRoom[5][2] << ']' ;
 	
 }
@@ -114,14 +115,22 @@ void createRooms(ZuulRoom** zuulRooms) {//creates rooms and adds them to zuulRoo
 	char* east = "EAST";
 	char* north = "NORTH";
 	char* south = "SOUTH";
-	char** entrances = new char*[4];
-	entrances = new char*{west, east, south};
-	ZuulRoom hall1 = new ZuulRoom("Hallway 1", "Your average hallway,	floor, tiles, ceiling etc. To the WEST you can see a janitors closet, to the EAST you see a lovely pink room, to the SOUTH you see another stretch of hallway.\n"
+	char entrance[] = {'w', 'e', 's'};
+	//entrance = ;
+	char* entrances = entrance;
+	std::string tmp = "Hallway 1";
+	char* h1 = new char[500];
+	strcpy(h1, tmp.c_str());
+	
+	ZuulRoom* hall1 = new ZuulRoom(h1, "Your average hallway,	floor, tiles, ceiling etc. To the WEST you can see a janitors closet, to the EAST you see a lovely pink room, to the SOUTH you see another stretch of hallway.\n"
 			,entrances);
 	zuulRooms[0][1] = hall1;
 	
+	char entrance1[] = {'w'};
+	char* entrances1 = entrance;
+	
 	ZuulRoom pinkRoom = new ZuulRoom("Pink Room", "This room is covered in pink things; pink umbrellas, pink apples, pink napkins, it even smells pink. Nothing useful seems to be in here unless you're looking for some pink underwear.\n",
-			new char*{'w'});
+			entrances1);
 	zuulRooms[0][2] = pinkRoom;
 	ZuulRoom hall2 = new ZuulRoom("Hallway 2", "Another hallway, exciting stuff. To the WEST is a bland looking office, to the EAST is the Girls Bathroom, unfortunately some girls seem to be in there already.\n",
 			new char{'n', 'w', 'e', 's'});
@@ -171,7 +180,7 @@ void createRooms(ZuulRoom** zuulRooms) {//creates rooms and adds them to zuulRoo
 	ZuulRoom armory2 = new ZuulRoom("Armory Office", "There are weapons in here! From assault rifles to rocket launchers, this room has it all! However, the most dangerous looking one is a massive rocket launcher called the BIG Z. This should get the job done.", bigZ, new char{'n'});
 	zuulRooms[5][0] = armory2;
 	
-	ZuulRoom bRoom = new ZuulRoom("THE BOSS", "The door explodes into a heap of rotting  and you enter the throne room. The lights suddenly turn on overhead. 'FOOL YOU THINK YOU CAN CHALLENGE ME?? MHUAHAHUUAHAHHAUA PREPARE TO DIE.' The fight commences and you launch a rocket at the Great Neet. He dies instantly. Wow that was easy. You pat yourself on the back and go out the back door. You begin heading home.",true, false, bigZ, new char{'n'});
+	ZuulRoom bRoom = new ZuulRoom("THE BOSS"), "The door explodes into a heap of rotting  and you enter the throne room. The lights suddenly turn on overhead. 'FOOL YOU THINK YOU CAN CHALLENGE ME?? MHUAHAHUUAHAHHAUA PREPARE TO DIE.' The fight commences and you launch a rocket at the Great Neet. He dies instantly. Wow that was easy. You pat yourself on the back and go out the back door. You begin heading home.",true, false, bigZ, new char{'n'});
 	zuulRooms[5][1] = bRoom;
 
 }
@@ -183,5 +192,5 @@ ZuulRoom getCurrentRoom(bool** inRoom, ZuulRoom** zuulRooms){
 			}
 		}
 	}
-	return 0; //if this runs yah fucked up somewhere
+	return NULL; //if this runs yah fucked up somewhere
 }
