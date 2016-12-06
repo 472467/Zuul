@@ -15,7 +15,7 @@
 
 //using namespace std;
 
-void printMap(bool**);
+void printMap(bool**, ZuulRoom**);
 bool checkPossible(int, int, char);
 bool checkNeighbor(int, int, bool**, bool**);
 void createRooms(ZuulRoom**);
