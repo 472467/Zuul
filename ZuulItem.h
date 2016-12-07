@@ -2,6 +2,8 @@
 #ifndef ZUULITEM_H
 #define ZUULITEM_H
 
+#include <string.h>
+
 class ZuulItem
 {
 	private:
@@ -12,6 +14,10 @@ class ZuulItem
 	public:
 		ZuulItem();
 		ZuulItem(char*, char*, char*);
+		char* getName();
+		char* getRoomText();
+		char* getDesc();
+		bool checkValid();
 };
 #endif
 /*

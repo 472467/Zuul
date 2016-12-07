@@ -17,7 +17,8 @@ int main() {
 
 	system("clear");//runs for sure
 	for (int i = 0; i < 6; i++) {
-		inventory[i] = ZuulItem("Lol", "XDDD", "Sup");
+		ZuulItem* z = new ZuulItem();	
+		inventory[i] = *z;
 	}
 
 	
@@ -25,31 +26,81 @@ int main() {
 	createRooms(zuulRooms);
 
 	for (int i = 0; i < 3; i++) {//sets all rooms to false
-		zuulRooms[i]= new ZuulRoom();
+		//zuulRooms[i]= new ZuulRoom();
 		for (int j = 0; j < 6; j++) {
 			inRoom[i][j] = false;
 		}
 	}
 
 	
-	inRoom[0][1] = true;//sets current room to true
+	inRoom[1][0] = true;//sets current room to true
 	
 	std::cout << "Greetings adventurer, you wake up in the castle of Neet, ruled by the most"
 			<<" dangerous being in the universe, Neet the Dark Sorcerer! To escape you must defeat him."
-			<< "\nGood luck laddie!";
-	printMap(inRoom, zuulRooms);
+			<< "\nGood luck laddie!" << std::endl;
+	
+	while(true){
+		printMap(inRoom, zuulRooms);
+		
+		std::cout << std::endl << "What do you want to do?" << std::endl;
+		
+		char* input = new char[20];
+		std::cin.getline(input, 20);
+		
+		translateMove(inRoom, zuulRooms, input, inventory);
+	}
 
+}
+
+bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem* inv){
+	
+	if(strcasecmp(input, "help") == 0){//help, finished
+	
+		std::cout << std::endl << std::endl << "\e[1m List of Commands and Descriptions \e[0m" << std::endl; 
+		std::cout << "All these commands are case insensitive." << std::endl << std::endl;
+		std::cout << "West, North, East, South: type these to move the player in the corresponding direction. The arrow keys can also be used to accomplish this." << std::endl;
+		std::cout << "Inv: Prints the inventory of the player. You can also press 'i' to accomplish this."<< std::endl;
+		std::cout << "Exit: Exits the game."<< std::endl;
+		std::cout << "___________________________________________" << std::endl;
+		std::cin.ignore();
+		
+	}else if(strcasecmp(input, "west") == 0){//add maps at somepoint
+		
+	}else if(strcasecmp(input, "east") == 0){
+		
+	}else if(strcasecmp(input, "north") == 0){
+		
+	}else if(strcasecmp(input, "south") == 0){
+		
+	}else if(strcasecmp(input, "inv") == 0){//finished
+	
+		bool ranOnce = false;
+		for(int x = 0; x < 6; x++){
+			if(inv[x].checkValid()){//checks if item is an item
+				ranOnce =true;
+				std::cout << inv[x].getName() << std::endl << inv[x].getDesc() << std::endl;
+				
+			}
+		}
+		if(!ranOnce){
+			std::cout<< "No items." << std::endl;
+		}
+		std::cin.ignore();
+		
+	}else if(strcasecmp(input, "exit") == 0){//finished
+		exit(0);
+	}
 }
 
 void printMap(bool** inRoom, ZuulRoom** zR){
 	char charMap[3][6];
 	for(int x = 0; x < 3; x++){
-		ZuulRoom* tmp = zR[x];
+		ZuulRoom* tmp = zR[x];//gets the array of with a specific x coordinate(0, 1, 2)
 		for(int y = 0; y < 6; y++){
-			if(inRoom[x][y]){
+			if(inRoom[x][y]){//moves to the correct room by going through y values of the x list
+				std::cout << std::endl << "Current Room: "<< "\e[1m"<<(tmp[y]).getName() << "\e[0m" << ", Type 'help' the list of commands" << std::endl;
 				
-				std::cout << (tmp[y])->getName();
-				std::cout << inRoom[x][y];
+				std::cout << std::endl << tmp[y].getDesc() << std::endl;
 				charMap[x][y] = 'X';
 			}else{
 				charMap[x][y] = ' ';
@@ -67,6 +118,7 @@ void printMap(bool** inRoom, ZuulRoom** zR){
 	
 	
 }
+
 
 bool checkPossible(int loc, int math, char plane) { //checks if location is within grid
 	int kappa = loc + math;
@@ -129,7 +181,7 @@ void createRooms(ZuulRoom** zuulRooms) {//creates rooms and adds them to zuulRoo
 	char* a = new char[300];
 	char* b = new char[300];
 	strcpy(a, "Hallway 1");
-	strcpy(b, "Your average hallway,	floor, tiles, ceiling etc. To the WEST you can see a janitors closet, to the EAST you see a lovely pink room, to the SOUTH you see another stretch of hallway.\n");
+	strcpy(b, "Your average hallway, floor, tiles, ceiling etc. To the WEST you can see a janitors closet, to the EAST you see a lovely pink room, to the SOUTH you see another stretch of hallway.\n");
 	ZuulRoom *hall1 = new ZuulRoom(a, b, entrances);
 	
 	
@@ -275,18 +327,41 @@ void createRooms(ZuulRoom** zuulRooms) {//creates rooms and adds them to zuulRoo
 	ZuulRoom* bRoom = new ZuulRoom("THE BOSS", "The door explodes into a heap of rotting  and you enter the throne room. The lights suddenly turn on overhead. 'FOOL YOU THINK YOU CAN CHALLENGE ME?? MHUAHAHUUAHAHHAUA PREPARE TO DIE.' The fight commences and you launch a rocket at the Great Neet. He dies instantly. Wow that was easy. You pat yourself on the back and go out the back door. You begin heading home.",
 	true, false, bigZ, entrances17);
 	
-	ZuulRoom z1[6] = {*janitorC, *blandOffice, *copyR, *sDungeon, *armory, *armory2};
-	ZuulRoom* zz1 = z1;
+	//ZuulRoom z1[6] = {*janitorC, *blandOffice, *copyR, *sDungeon, *armory, *armory2};
+	ZuulRoom* z1 = new ZuulRoom[6];
+	z1[0] = *janitorC;
+	z1[1] = *blandOffice;
+	z1[2] = *copyR;
+	z1[3] = *sDungeon;
+	z1[4] = *armory;
+	z1[5] = *armory2;
+	//ZuulRoom* zz1 = z1;
 	
-	zuulRooms[0] = zz1;//finally fixed it, assigns arrays to the correct zRooms position
+	zuulRooms[0] = z1;//finally fixed it, assigns arrays to the correct zRooms position
 	
-	ZuulRoom z2[6] = {*hall1, *hall2, *hall3, *hall4, *hall5, *bRoom};
-	ZuulRoom* zz2 = z2;
-	zuulRooms[1] = zz2;
+	//ZuulRoom z2[6] = {*hall1, *hall2, *hall3, *hall4, *hall5, };
+	ZuulRoom* z2 = new ZuulRoom[6];
+	z2[0] = *hall1;
+	z2[1] = *hall2;
+	z2[2] = *hall3;
+	z2[3] = *hall4;
+	z2[4] = *hall5;
+	z2[5] = *bRoom;
 	
-	ZuulRoom z3[6] = {*pinkRoom, *girlsB, *boysB, *tRoom, *legalD, *legalD2};
-	ZuulRoom* zz3 = z3;
-	zuulRooms[2] = zz3;
+	//ZuulRoom* zz2 = z2;
+	zuulRooms[1] = z2;
+	
+	//ZuulRoom z3[6] = {*pinkRoom, *girlsB, *boysB, *tRoom, *legalD, *legalD2};
+	ZuulRoom* z3 = new ZuulRoom[6];
+	z3[0] = *pinkRoom;
+	z3[1] = *girlsB;
+	z3[2] = *boysB;
+	z3[3] = *tRoom;
+	z3[4] = *legalD;
+	z3[5] = *legalD2;
+	
+	//ZuulRoom* zz3 = z3;
+	zuulRooms[2] = z3;
 
 }
 ZuulRoom getCurrentRoom(bool** inRoom, ZuulRoom** zuulRooms){

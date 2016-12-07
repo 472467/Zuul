@@ -1,13 +1,17 @@
 #include "ZuulRoom.h"
 
 ZuulRoom::ZuulRoom() {
-    char* roomName = "NONE SET"; //default contructers
-    char* description = "No desc set somehow";
-    bool canEnter = true;
+    roomName = "NONE SET"; //default contructers
+	
+    description = "No desc set somehow";
+    canEnter = true;
+	
     ZuulItem* enterItem = new ZuulItem();
     ZuulItem* containedItem = new ZuulItem();
-    char* entrances = new char[4];// N1, S2, W3, E4 
-    bool winGame = false;
+	
+    entrances = new char[4];// N1, S2, W3, E4 
+    winGame = false;
+	
 	for(int x = 0; x < 4; x++){//initializes arrays 
 		entrances[x] = 'x';
 	}

@@ -14,7 +14,7 @@
 #pragma once
 
 //using namespace std;
-
+bool translateMove(bool**, ZuulRoom**, char*, ZuulItem*);
 void printMap(bool**, ZuulRoom**);
 bool checkPossible(int, int, char);
 bool checkNeighbor(int, int, bool**, bool**);

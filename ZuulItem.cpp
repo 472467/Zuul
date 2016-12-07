@@ -1,10 +1,16 @@
 #include "ZuulItem.h"
 
 ZuulItem::ZuulItem() {
-    char* name = "No Name"; //default contructors
-    char* description = "No description";
-    char* roomText= " ";//displays specific text when it's contained in a room
-    bool isItem = false; //checks whether item is a non default item
+    name = new char[20]; //default contructors
+	strcpy(name, "No Name");
+    
+	description = new char[150];
+	strcpy(description, "No description");
+	
+    roomText =  new char[150];//displays specific text when it's contained in a room
+	strcpy(roomText, "No RoomText");
+	
+    isItem = false; //checks whether item is a non default item
 }
 
 ZuulItem::ZuulItem(char* n, char* desc, char* roomT){
@@ -13,4 +19,20 @@ ZuulItem::ZuulItem(char* n, char* desc, char* roomT){
 	roomText= roomT;
 	isItem = true;
 	
+}
+
+char* ZuulItem::getDesc(){
+	return description;
+}
+
+char* ZuulItem::getRoomText(){
+	return roomText;
+}
+
+bool ZuulItem::checkValid(){
+	return isItem;
+}
+
+char* ZuulItem::getName(){
+	return name;
 }
