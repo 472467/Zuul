@@ -27,6 +27,9 @@ class ZuulRoom
 		char* getDesc();
 		char* getName();
 		void toString();
+		ZuulItem* getEnterItem();
+		bool getCanEnter();
+		void setCanEnter(bool);
 	
 
 };

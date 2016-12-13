@@ -69,6 +69,18 @@ char* ZuulRoom::getDesc(){//gets desc
 char* ZuulRoom::getName(){//gets name
 	return roomName;
 }
+bool ZuulRoom::getCanEnter(){
+	return canEnter;
+}
+ZuulItem* ZuulRoom::getEnterItem(){
+	return enterItem;
+}
+
+void ZuulRoom:: setCanEnter(bool canEnt){
+	canEnter = canEnt;
+}
+
+
 /*
 void ZuulRoom::toString(){ //gives all info about zuulroom in string format for debug
    cout << "Name: " << roomName << "\nCanEnter: " << canEnter << "\nContained Item: " << containedItem.getName() << "\nEntrances: " << getEntrances() << "Game won: " << winGame;

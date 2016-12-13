@@ -33,13 +33,14 @@ int main() {
 	}
 
 	
-	inRoom[1][0] = true;//sets current room to true
+	inRoom[1][1] = true;//sets current room to true
 	
 	std::cout << "Greetings adventurer, you wake up in the castle of Neet, ruled by the most"
 			<<" dangerous being in the universe, Neet the Dark Sorcerer! To escape you must defeat him."
 			<< "\nGood luck laddie!" << std::endl;
 	
 	while(true){
+		
 		printMap(inRoom, zuulRooms);
 		
 		std::cout << std::endl << "What do you want to do?" << std::endl;
@@ -53,6 +54,18 @@ int main() {
 }
 
 bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem* inv){
+	ZuulRoom currentR = getCurrentRoom(inRoom, zR);
+	int originX = 0;
+	int originY = 0;
+	for(int x = 0; x < 3; x++){
+		for(int y = 0; y < 6; y++){
+			if(zR[x][y].getName() == currentR.getName()){
+				
+				originX = x;
+				originY = y;
+			}
+		}
+	}
 	
 	if(strcasecmp(input, "help") == 0){//help, finished
 	
@@ -65,13 +78,144 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem* inv){
 		std::cin.ignore();
 		
 	}else if(strcasecmp(input, "west") == 0){//add maps at somepoint
-		
+		if(checkPossible(originX, -1, 'x')){//checks if the location you want to move to is valid
+			
+			bool passed = false;
+			
+			for(int x = 0; x < 4; x++){
+				if(zR[originX - 1][originY].getEntrances()[x] == 'e'){
+					passed = true;
+					break;
+				}else if(zR[originX - 1][originY].getEntrances()[x] == '\0'){
+					break;
+				}
+			}
+			bool passedAgain = false;//checks if the 
+			
+			if(passed){//checks if you can enter the room from this way
+			std::cout<< "true";
+				if(currentR.getCanEnter()){
+					passedAgain = true;
+				}else{
+					for(int x = 0; x < 6; x++){
+						if(inv[x].getName() ==  (currentR.getEnterItem())->getName()){
+							passedAgain = true;
+							ZuulItem* tmp = new ZuulItem();
+							inv[x] = *tmp;
+							zR[originX - 1][originY].setCanEnter(true);
+						}
+					}
+				}
+			}
+			
+			if(passedAgain){//if you dont need an item to enter or have the item to enter
+				moveRoom(originX - 1, originY, inRoom);
+			}
+		}
 	}else if(strcasecmp(input, "east") == 0){
-		
+		if(checkPossible(originX, 1, 'x')){
+			bool passed = false;
+			
+			for(int x = 0; x < 4; x++){
+				if(zR[originX + 1][originY].getEntrances()[x] == 'w'){//change this 
+					passed = true;
+					break;
+				}else if(zR[originX + 1][originY].getEntrances()[x] == '\0'){//change this
+					break;
+				}
+			}
+			bool passedAgain = false;//checks if the 
+			
+			if(passed){//checks if you can enter the room from this way
+				if(currentR.getCanEnter()){
+					passedAgain = true;
+				}else{
+					for(int x = 0; x < 6; x++){
+						if(inv[x].getName() ==  (currentR.getEnterItem())->getName()){
+							passedAgain = true;
+							ZuulItem* tmp = new ZuulItem();
+							inv[x] = *tmp;
+							zR[originX + 1][originY].setCanEnter(true);// cahnge this
+						}
+					}
+				}
+			}
+			
+			if(passedAgain){//if you dont need an item to enter or have the item to enter
+				moveRoom(originX + 1, originY, inRoom);//cahnge this
+			}
+		}
 	}else if(strcasecmp(input, "north") == 0){
-		
+		if(checkPossible(originY, -1, 'y')){
+			bool passed = false;
+			
+			for(int x = 0; x < 4; x++){
+				if(zR[originX][originY -1].getEntrances()[x] == 's'){//change this 
+					passed = true;
+					break;
+				}else if(zR[originX][originY - 1].getEntrances()[x] == '\0'){//change this
+					break;
+				}
+			}
+			bool passedAgain = false;//checks if the 
+			
+			if(passed){//checks if you can enter the room from this way
+				if(currentR.getCanEnter()){
+					passedAgain = true;
+				}else{
+					for(int x = 0; x < 6; x++){
+						if(inv[x].getName() ==  (currentR.getEnterItem())->getName()){
+							passedAgain = true;
+							ZuulItem* tmp = new ZuulItem();
+							inv[x] = *tmp;
+							zR[originX][originY -1 ].setCanEnter(true);// cahnge this
+						}
+					}
+				}
+			}
+			
+			if(passedAgain){//if you dont need an item to enter or have the item to enter
+				moveRoom(originX, originY - 1, inRoom);//cahnge this
+			}
+		}
 	}else if(strcasecmp(input, "south") == 0){
-		
+		if(checkPossible(originY, 1, 'y')){
+			bool passed = false;
+			
+			for(int x = 0; x < 4; x++){
+				if(zR[originX][originY +1].getEntrances()[x] == 'n'){//change this 
+					passed = true;
+					break;
+				}else if(zR[originX][originY + 1].getEntrances()[x] == '\0'){//change this
+					break;
+				}
+			}
+			bool passedAgain = false;//checks if the 
+			
+			if(passed){//checks if you can enter the room from this way
+				if(currentR.getCanEnter()){
+					passedAgain = true;
+				}else{
+					for(int x = 0; x < 6; x++){
+						if(inv[x].getName() ==  (currentR.getEnterItem())->getName()){
+							passedAgain = true;
+							ZuulItem* tmp = new ZuulItem();
+							inv[x] = *tmp;
+							zR[originX][originY + 1].setCanEnter(true);// cahnge this
+						}
+					}
+				}
+			}else{
+				std::cout << "Can't enter this way.";
+			}
+			
+			if(passedAgain){//if you dont need an item to enter or have the item to enter
+				
+				moveRoom(originX, originY + 1, inRoom);//cahnge this
+			}else{
+				std::cout << "You don't have the necessary item to open this room!";
+			}
+		}
 	}else if(strcasecmp(input, "inv") == 0){//finished
 	
 		bool ranOnce = false;
@@ -119,20 +263,44 @@ void printMap(bool** inRoom, ZuulRoom** zR){
 	
 }
 
+void moveRoom(int changeX, int changeY, bool** inRoom){
+	for(int x = 0; x < 3; x++){
+		for(int y = 0; y < 6; y++){
+			if(inRoom[x][y]){
+				inRoom[x][y] = false;
+			}
+		}
+	}
+	
+	inRoom[changeX][changeY] = true;
+	std::cout <<  "inRoom[" << changeX << ']' << '[' << changeY << "] = " << inRoom[changeX][changeY];
+}
+
 
 bool checkPossible(int loc, int math, char plane) { //checks if location is within grid
-	int kappa = loc + math;
-	int axisNum;
-	if ('y' == plane) {//checks if plane is y or x
+	int newLoc = loc + math;//this is the wanted location
+	int axisNum; //axis num is the max of the plane given
+	if ('y' == plane) {//checks if plane is y or x, plane is the plane the player is located
 		std::cout << plane;
 		axisNum = 3;
 	} else {
 		axisNum = 6;
 	}
-	if (kappa >= axisNum || kappa < 0 == true) {
+	if (newLoc > axisNum || newLoc < 0 == true) {
 		return false;
 	}
 	return true;
+}
+
+ZuulRoom getCurrentRoom(bool** inRoom, ZuulRoom** zuulRooms){
+	for (int i = 0; i < 3; i++) {
+		for (int j = 0; j < 6; j++) {
+			if(inRoom[i][j]){
+				return zuulRooms[i][j];
+			}
+		}
+	}
+	return NULL; //if this runs yah fucked up somewhere
 }
 
 bool checkNeighbor(int locX, int locY, bool** inRoom, bool** neighbors) {//checks if given location is a neighbor
@@ -363,14 +531,4 @@ void createRooms(ZuulRoom** zuulRooms) {//creates rooms and adds them to zuulRoo
 	//ZuulRoom* zz3 = z3;
 	zuulRooms[2] = z3;
 
-}
-ZuulRoom getCurrentRoom(bool** inRoom, ZuulRoom** zuulRooms){
-	for (int i = 0; i < 3; i++) {
-		for (int j = 0; j < 6; j++) {
-			if(inRoom[i][j]){
-				return zuulRooms[i][j];
-			}
-		}
-	}
-	return NULL; //if this runs yah fucked up somewhere
 }

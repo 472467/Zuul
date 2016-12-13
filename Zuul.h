@@ -20,4 +20,5 @@ bool checkPossible(int, int, char);
 bool checkNeighbor(int, int, bool**, bool**);
 void createRooms(ZuulRoom**);
 ZuulRoom getCurrentRoom(bool**, ZuulRoom**);
+void moveRoom(int, int, bool**);
 //int translateMove(char* in, std::vector<Media*>* v);
