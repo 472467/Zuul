@@ -12,17 +12,17 @@ int main() {
 	bool** inRoom = new bool*[6];//default variables 6x3
 	bool** neighbors = new bool*[6]; //6x3
 	ZuulRoom** zuulRooms =new ZuulRoom*[6];//6x 3y
-	bool gameWon = false;
+	bool gameWon = false;//HAVE YOU WON THE GAME PUNK
 	ZuulItem** inventory = new ZuulItem*[6];//6
 
 	system("clear");//runs for sure
 	for (int i = 0; i < 6; i++) {
-		inventory[i] = new ZuulItem();
+		inventory[i] = new ZuulItem();//FILLS INVENTORY WITH BLANK SPOTS
 	}
 
 	
 
-	createRooms(zuulRooms);
+	createRooms(zuulRooms);//INITIALIZES ROOMS OF CANCER
 	
 
 	for (int i = 0; i < 3; i++) {//sets all rooms to false
@@ -42,28 +42,28 @@ int main() {
 	
 	while(true){
 		
-		printMap(inRoom, zuulRooms);
+		printMap(inRoom, zuulRooms);//THIS PRINTS THE MAP
 		
 		std::cout << std::endl << "What do you want to do?" << std::endl;
 		
-		char* input = new char[20];
+		char* input = new char[20];//GETS THE INPUT
 		std::cin.getline(input, 20);
 		
-		translateMove(inRoom, zuulRooms, input, inventory);
+		translateMove(inRoom, zuulRooms, input, inventory);//DOES STUFF WITH INPUT
 	}
 
 }
 
 bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem** inv){
-	ZuulRoom currentR = getCurrentRoom(inRoom, zR);
-	if(currentR.getWonGame()){
+	ZuulRoom currentR = getCurrentRoom(inRoom, zR);//CURRENT ROOM
+	if(currentR.getWonGame()){//ENDS GAME YOU ARE WIN CONGRATS
 		std::cout << "CONGRATS YOU HAVE WON, WAY TO GO. SO LONG.";
 		std::cin.ignore();
 		exit(0);
 	}
-	int originX = 0;
+	int originX = 0;//ORIGIN COORDS
 	int originY = 0;
-	for(int x = 0; x < 3; x++){
+	for(int x = 0; x < 3; x++){//FINDS THESE COORDS
 		for(int y = 0; y < 6; y++){
 			if(zR[x][y].getName() == currentR.getName()){
 				
@@ -89,9 +89,9 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem** inv){
 			
 			bool passed = false;
 			for(int x = 0; x < 4; x++){
-				if(zR[originX - 1][originY].getEntrances()[x] == 'e'){
+				if(zR[originX - 1][originY].getEntrances()[x] == 'e'){//ENTRANCE MUST BE OPPOSITE FOR REASONS
 					passed = true;
-					break;
+					break;//BREAKS TO MAKE SURE NO CHECK ON NULL VALUE
 				}else if(zR[originX - 1][originY].getEntrances()[x] == '\0'){
 					break;
 				}
@@ -99,16 +99,14 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem** inv){
 			bool passedAgain = false;//checks if the 
 			
 			if(passed){//checks if you can enter the room from this way
-				std::cout << "THIS HAS PASSED: ";
-				std::cout << zR[originX + 1][originY].getCanEnter();
-				std::cout << true;
 
-				if(zR[originX - 1][originY].getCanEnter()){
+
+				if(zR[originX - 1][originY].getCanEnter()){//CAN YOU ENTER?
 					
 					passedAgain = true;
 				}else{
 					for(int x = 0; x < 6; x++){
-						if(inv[x]->getName() ==  (zR[originX - 1][originY].getEnterItem())->getName()){
+						if(inv[x]->getName() ==  (zR[originX - 1][originY].getEnterItem())->getName()){//THIS CHECKS IF YOU HAVE THE ENTER ITEM
 							
 							passedAgain = true;
 							inv[x] = new ZuulItem();
@@ -121,12 +119,12 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem** inv){
 			}
 			
 			if(passedAgain){//if you dont need an item to enter or have the item to enter
-				moveRoom(originX - 1, originY, inRoom);
+				moveRoom(originX - 1, originY, inRoom);//MOVES ROOM
 			}else{
 				std::cout << std::endl << "\e[1mYou don't have the necessary item to open this room!\e[0m"<< std::endl;
 			}
 		}
-	}else if(strcasecmp(input, "east") == 0){
+	}else if(strcasecmp(input, "east") == 0){//SAME AS LAST ONE BUT EAST
 		if(checkPossible(originX, 1, 'x')){
 			bool passed = false;
 			
@@ -141,9 +139,6 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem** inv){
 			bool passedAgain = false;//checks if the 
 			
 			if(passed){//checks if you can enter the room from this way
-				std::cout << "THIS HAS PASSED: ";
-				std::cout << zR[originX + 1][originY].getCanEnter();
-				std::cout << true;
 				if(zR[originX + 1][originY].getCanEnter() == true){
 					
 					passedAgain = true;
@@ -153,8 +148,7 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem** inv){
 							passedAgain = true;
 							ZuulItem* tmp = new ZuulItem();
 							inv[x] = tmp;
-							bool FUCKYOU = true;//cancer , cancer cancer cancer cancer
-							zR[originX + 1] [originY].setCanEnter(FUCKYOU);// cahnge this
+							zR[originX + 1] [originY].setCanEnter(true);// cahnge this
 						}
 					}
 				}
@@ -183,9 +177,7 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem** inv){
 			bool passedAgain = false;//checks if the 
 			
 			if(passed){//checks if you can enter the room from this way
-			std::cout << "THIS HAS PASSED: ";
-				std::cout << zR[originX + 1][originY].getCanEnter();
-				std::cout << true;
+
 				if(zR[originX][originY - 1].getCanEnter()){
 					passedAgain = true;
 				}else{
@@ -223,12 +215,8 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem** inv){
 				}
 			}
 			bool passedAgain = false;//checks if the 
-			std::cout << (zR[originX][originY + 1].getEnterItem())->getName();
-			//std::cout << inv[0]->getName();
+
 			if(passed){//checks if you can enter the room from this way
-			std::cout << "THIS HAS PASSED: ";
-				std::cout << zR[originX + 1][originY].getCanEnter();
-				std::cout << true;
 				//std::cout<< "test";
 				if(zR[originX][originY + 1].getCanEnter()){
 					passedAgain = true;
@@ -254,24 +242,24 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem** inv){
 				std::cout << std::endl << "\e[1mYou don't have the necessary item to open this room!\e[0m"<< std::endl;
 			}
 		}
-	}else if(strcasecmp(input, "inv") == 0){//finished
+	}else if(strcasecmp(input, "inv") == 0){//PRINTS UR INVENTORY
 	
 		bool ranOnce = false;
 		for(int x = 0; x < 6; x++){
 			if(inv[x]->checkValid()){//checks if item is an item
 				ranOnce =true;
-				std::cout << std::endl <<inv[x]->getName() << std::endl << inv[x]->getDesc() << std::endl;
+				std::cout << std::endl <<inv[x]->getName() << std::endl << inv[x]->getDesc() << std::endl;//PRINTS NAME AND DESC
 				
 			}
 		}
 		if(!ranOnce){
 			std::cout<< "No items." << std::endl;
 		}
-		std::cin.ignore();
+		std::cin.ignore();//MAKES YOIU PRESS ENTER MAYBE
 		
-	}else if(strcasecmp(input, "exit") == 0){//finished
+	}else if(strcasecmp(input, "exit") == 0){//EXITS THE GARBAGE GAME
 		exit(0);
-	}else if(strcasecmp(input, "pickup") == 0){
+	}else if(strcasecmp(input, "pickup") == 0){//PICKS UP ITEM ;)
 		int tX = 0;
 		int tY = 0;
 		for (int i = 0; i < 3; i++) {
@@ -283,22 +271,22 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem** inv){
 			}
 		}
 		for(int x = 0; x < 6; x++){
-			if(!inv[x]->checkValid()){
+			if(!inv[x]->checkValid()){//CHECKS IF IT IS LEGAL
 				if(zR[tX][tY].getContainedItem()->checkValid()){
 					ZuulItem* lol = zR[tX][tY].getContainedItem();
 					inv[x]= lol;
 					ZuulItem* tmp =  new ZuulItem();
 					zR[tX][tY].setContainedItem(tmp);
 
-					break;
+					break;//MAKE SURE DOESNT SET ALL TO SAME ITEM
 				}
 			}
 		}
 	}
 }
 
-void printMap(bool** inRoom, ZuulRoom** zR){
-	char charMap[3][6];
+void printMap(bool** inRoom, ZuulRoom** zR){//PRINTS MAP LOL
+	char charMap[3][6];//CHAR MAP TO PRINT
 	for(int x = 0; x < 3; x++){
 		ZuulRoom* tmp = zR[x];//gets the array of with a specific x coordinate(0, 1, 2)
 		for(int y = 0; y < 6; y++){
@@ -314,7 +302,7 @@ void printMap(bool** inRoom, ZuulRoom** zR){
 		}
 	}
 
-	if((getCurrentRoom(inRoom, zR).getContainedItem())->checkValid()){
+	if((getCurrentRoom(inRoom, zR).getContainedItem())->checkValid()){//PRINTS ROOMTEXT OF CONTAINED ITEM
 		
 		std::cout << (getCurrentRoom(inRoom, zR).getContainedItem())->getRoomText() << std::endl;
 	}
@@ -341,7 +329,7 @@ void printMap(bool** inRoom, ZuulRoom** zR){
 	
 }
 
-void moveRoom(int changeX, int changeY, bool** inRoom){
+void moveRoom(int changeX, int changeY, bool** inRoom){//MOVES ROOM
 	for(int x = 0; x < 3; x++){
 		for(int y = 0; y < 6; y++){
 			if(inRoom[x][y]){
@@ -380,7 +368,7 @@ ZuulRoom getCurrentRoom(bool** inRoom, ZuulRoom** zuulRooms){
 	return NULL; //if this runs yah fucked up somewhere
 }
 
-bool checkNeighbor(int locX, int locY, bool** inRoom, bool** neighbors) {//checks if given location is a neighbor
+bool checkNeighbor(int locX, int locY, bool** inRoom, bool** neighbors) {//NOT USED, NOT REMOVING IT BECAUSE TOO LAZY
 	int x = 0;
 	int y = 0;
 	int count = 0;
