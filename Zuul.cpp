@@ -56,6 +56,11 @@ int main() {
 
 bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem** inv){
 	ZuulRoom currentR = getCurrentRoom(inRoom, zR);
+	if(currentR.getWonGame()){
+		std::cout << "CONGRATS YOU HAVE WON, WAY TO GO. SO LONG.";
+		std::cin.ignore();
+		exit(0);
+	}
 	int originX = 0;
 	int originY = 0;
 	for(int x = 0; x < 3; x++){
@@ -94,8 +99,11 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem** inv){
 			bool passedAgain = false;//checks if the 
 			
 			if(passed){//checks if you can enter the room from this way
-				std::cout<< (zR[originX - 1][originY].getEnterItem())->checkValid();
-				if((zR[originX - 1][originY].getEnterItem())->checkValid() != 1){
+				std::cout << "THIS HAS PASSED: ";
+				std::cout << zR[originX + 1][originY].getCanEnter();
+				std::cout << true;
+
+				if(zR[originX - 1][originY].getCanEnter()){
 					
 					passedAgain = true;
 				}else{
@@ -133,7 +141,11 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem** inv){
 			bool passedAgain = false;//checks if the 
 			
 			if(passed){//checks if you can enter the room from this way
-				if(zR[originX + 1][originY].getCanEnter()){
+				std::cout << "THIS HAS PASSED: ";
+				std::cout << zR[originX + 1][originY].getCanEnter();
+				std::cout << true;
+				if(zR[originX + 1][originY].getCanEnter() == true){
+					
 					passedAgain = true;
 				}else{
 					for(int x = 0; x < 6; x++){
@@ -141,7 +153,8 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem** inv){
 							passedAgain = true;
 							ZuulItem* tmp = new ZuulItem();
 							inv[x] = tmp;
-							zR[originX + 1][originY].setCanEnter(true);// cahnge this
+							bool FUCKYOU = true;//cancer , cancer cancer cancer cancer
+							zR[originX + 1] [originY].setCanEnter(FUCKYOU);// cahnge this
 						}
 					}
 				}
@@ -170,6 +183,9 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem** inv){
 			bool passedAgain = false;//checks if the 
 			
 			if(passed){//checks if you can enter the room from this way
+			std::cout << "THIS HAS PASSED: ";
+				std::cout << zR[originX + 1][originY].getCanEnter();
+				std::cout << true;
 				if(zR[originX][originY - 1].getCanEnter()){
 					passedAgain = true;
 				}else{
@@ -207,13 +223,18 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem** inv){
 				}
 			}
 			bool passedAgain = false;//checks if the 
-			
+			std::cout << (zR[originX][originY + 1].getEnterItem())->getName();
+			//std::cout << inv[0]->getName();
 			if(passed){//checks if you can enter the room from this way
+			std::cout << "THIS HAS PASSED: ";
+				std::cout << zR[originX + 1][originY].getCanEnter();
+				std::cout << true;
 				//std::cout<< "test";
 				if(zR[originX][originY + 1].getCanEnter()){
 					passedAgain = true;
 				}else{
 					for(int x = 0; x < 6; x++){
+						
 						if(inv[x]->getName() ==  (zR[originX][originY + 1].getEnterItem())->getName()){
 							passedAgain = true;
 							ZuulItem* tmp = new ZuulItem();
@@ -238,9 +259,8 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem** inv){
 		bool ranOnce = false;
 		for(int x = 0; x < 6; x++){
 			if(inv[x]->checkValid()){//checks if item is an item
-				std::cout<< "Valid" << std::endl;
 				ranOnce =true;
-				std::cout << inv[x]->getName() << std::endl << inv[x]->getDesc() << std::endl;
+				std::cout << std::endl <<inv[x]->getName() << std::endl << inv[x]->getDesc() << std::endl;
 				
 			}
 		}
@@ -252,27 +272,25 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem** inv){
 	}else if(strcasecmp(input, "exit") == 0){//finished
 		exit(0);
 	}else if(strcasecmp(input, "pickup") == 0){
+		int tX = 0;
+		int tY = 0;
+		for (int i = 0; i < 3; i++) {
+			for (int j = 0; j < 6; j++) {
+				if(inRoom[i][j]){
+					tX = i;
+					tY = j;
+				}
+			}
+		}
 		for(int x = 0; x < 6; x++){
 			if(!inv[x]->checkValid()){
-				if(currentR.getContainedItem()->checkValid()){
-					int tX = 0;
-					int tY = 0;
-					
-					for (int i = 0; i < 3; i++) {
-						for (int j = 0; j < 6; j++) {
-							if(inRoom[i][j]){
-								tX = i;
-								tY = j;
-							}
-						}
-					}
-					ZuulItem* clone = new ZuulItem((currentR.getContainedItem())->getName(), (currentR.getContainedItem())->getDesc(), (currentR.getContainedItem())->getRoomText());
-					inv[x]= clone;
+				if(zR[tX][tY].getContainedItem()->checkValid()){
+					ZuulItem* lol = zR[tX][tY].getContainedItem();
+					inv[x]= lol;
 					ZuulItem* tmp =  new ZuulItem();
 					zR[tX][tY].setContainedItem(tmp);
-					char* c = (clone->getName());
-					//std::cout<< c << std::endl;
-					fflush(stdin);
+
+					break;
 				}
 			}
 		}
@@ -311,6 +329,14 @@ void printMap(bool** inRoom, ZuulRoom** zR){
 	<< '[' << charMap[0][3] << ']' << '[' << charMap[1][3] << ']' << '[' << charMap[2][3] << ']' << std::endl
 	<< '[' << charMap[0][4] << ']' << '[' << charMap[1][4] << ']' << '[' << charMap[2][4] << ']' << std::endl
 	<< '[' << charMap[0][5] << ']' << '[' << charMap[1][5] << ']' << '[' << charMap[2][5] << ']' << std::endl;
+	
+	std::cout<< "\n"
+	<< '[' << zR[0][0].getCanEnter() << ']' << '[' << zR[1][0].getCanEnter() << ']' << '[' << zR[2][0].getCanEnter() << ']' << std::endl
+	<< '[' << zR[0][1].getCanEnter() << ']' << '[' << zR[1][1].getCanEnter() << ']' << '[' << zR[2][1].getCanEnter() << ']' << std::endl
+	<< '[' << zR[0][2].getCanEnter() << ']' << '[' << zR[1][2].getCanEnter() << ']' << '[' << zR[2][2].getCanEnter() << ']' << std::endl
+	<< '[' << zR[0][3].getCanEnter() << ']' << '[' << zR[1][3].getCanEnter() << ']' << '[' << zR[2][3].getCanEnter() << ']' << std::endl
+	<< '[' << zR[0][4].getCanEnter() << ']' << '[' << zR[1][4].getCanEnter() << ']' << '[' << zR[2][4].getCanEnter() << ']' << std::endl
+	<< '[' << zR[0][5].getCanEnter() << ']' << '[' << zR[1][5].getCanEnter() << ']' << '[' << zR[2][5].getCanEnter() << ']' << std::endl;
 	
 	
 }
@@ -450,8 +476,8 @@ void createRooms(ZuulRoom** zuulRooms) {//creates rooms and adds them to zuulRoo
 	
 	char entrance6[] = {'e'};
 	char* entrances6 = "e";
-	
-	ZuulItem* jKey = new ZuulItem("Janitor's Key",
+	char* name1 = "Janitor's Key";
+	ZuulItem* jKey = new ZuulItem(name1,
 			"I think you can figure out what this is for.", "You can see a key on top of one of the desks.");
 	ZuulRoom* blandOffice = new ZuulRoom("Bland Office", "This is, without a doubt, the blandest office you have ever endured. Beige surrounds you. Beige watches. You never felt so bored yet intimidated at the same time. The room smells faintly of cleaning supplies and paper.\n",
 	jKey, entrances6);

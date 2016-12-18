@@ -19,7 +19,7 @@ ZuulRoom::ZuulRoom() {
 ZuulRoom::ZuulRoom(char* name, char* desc, bool canEnt, ZuulItem* enter, ZuulItem* contItem, char* ent){//room with all 
 	roomName = name;
 	description = desc;
-	canEnter = canEnt;
+	canEnter = false;
 	enterItem = enter;
 	containedItem = contItem;
 	entrances = ent;
@@ -28,7 +28,7 @@ ZuulRoom::ZuulRoom(char* name, char* desc, bool canEnt, ZuulItem* enter, ZuulIte
 ZuulRoom::ZuulRoom(char* name, char* desc, bool canEnt, ZuulItem* enter, char* ent){//room with item needed to enter
 	roomName = name;
 	description = desc;
-	canEnter = canEnt;
+	canEnter = false;
 	enterItem = enter;
 	containedItem = new ZuulItem();
 	entrances = ent;
@@ -37,7 +37,7 @@ ZuulRoom::ZuulRoom(char* name, char* desc, bool canEnt, ZuulItem* enter, char* e
 ZuulRoom::ZuulRoom(char* name, char* desc, bool wonG, bool canEnt, ZuulItem* enter, char* ent){//boss room
 	roomName = name;
 	description = desc;
-	canEnter = canEnt;
+	canEnter = false;
 	enterItem = enter;
 	containedItem = new ZuulItem();
 	entrances = ent;
@@ -50,6 +50,7 @@ ZuulRoom::ZuulRoom(char* name, char* desc, ZuulItem* contItem, char* ent){//room
 	containedItem = contItem;
 	enterItem = new ZuulItem();
 	entrances = ent;
+	canEnter = true;
 	
 }
 ZuulRoom::ZuulRoom(char* name, char* desc, char* ent){ //basic room
@@ -58,6 +59,7 @@ ZuulRoom::ZuulRoom(char* name, char* desc, char* ent){ //basic room
 	entrances= ent;
 	containedItem = new ZuulItem();
 	enterItem = new ZuulItem();
+	canEnter  =true;
 }
 ZuulRoom::ZuulRoom(char* name){//creates placeholder room
 	roomName =  name;
@@ -89,13 +91,12 @@ void ZuulRoom::setContainedItem(ZuulItem* zI){
 	containedItem = zI;
 }
 
-void ZuulRoom:: setCanEnter(bool canEnt){
+void ZuulRoom::setCanEnter(bool canEnt){
 	canEnter = canEnt;
 }
 
-
-/*
-void ZuulRoom::toString(){ //gives all info about zuulroom in string format for debug
-   cout << "Name: " << roomName << "\nCanEnter: " << canEnter << "\nContained Item: " << containedItem.getName() << "\nEntrances: " << getEntrances() << "Game won: " << winGame;
+bool ZuulRoom::getWonGame(){
+	return winGame;
 }
-*/
+
+

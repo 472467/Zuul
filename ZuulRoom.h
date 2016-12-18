@@ -32,6 +32,7 @@ class ZuulRoom
 		void setCanEnter(bool);
 		ZuulItem* getContainedItem();
 		void setContainedItem(ZuulItem*);
+		bool getWonGame();
 	
 
 };

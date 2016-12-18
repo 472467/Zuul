@@ -15,7 +15,7 @@ ZuulItem::ZuulItem() {
 
 ZuulItem::ZuulItem(char* n, char* desc, char* roomT){
 	
-	n = name;
+	name = n;
 	description=  desc;
 	roomText= roomT;
 	isItem = true;
