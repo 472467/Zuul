@@ -1,19 +1,20 @@
 #include "ZuulItem.h"
 
 ZuulItem::ZuulItem() {
-    name = new char[20]; //default contructors
-	strcpy(name, "No Name");
+    name = "No Name"; //default contructors
+	//strcpy(name, "No Name");
     
-	description = new char[150];
-	strcpy(description, "No description");
+	description = "No Description";
+	//strcpy(description, "No description");
 	
-    roomText =  new char[150];//displays specific text when it's contained in a room
-	strcpy(roomText, "No RoomText");
+    roomText =  "No RoomText";//displays specific text when it's contained in a room
+	//strcpy(roomText, "No RoomText");
 	
     isItem = false; //checks whether item is a non default item
 }
 
 ZuulItem::ZuulItem(char* n, char* desc, char* roomT){
+	
 	n = name;
 	description=  desc;
 	roomText= roomT;

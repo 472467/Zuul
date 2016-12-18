@@ -13,17 +13,17 @@ int main() {
 	bool** neighbors = new bool*[6]; //6x3
 	ZuulRoom** zuulRooms =new ZuulRoom*[6];//6x 3y
 	bool gameWon = false;
-	ZuulItem* inventory = new ZuulItem[6];//6
+	ZuulItem** inventory = new ZuulItem*[6];//6
 
 	system("clear");//runs for sure
 	for (int i = 0; i < 6; i++) {
-		ZuulItem* z = new ZuulItem();	
-		inventory[i] = *z;
+		inventory[i] = new ZuulItem();
 	}
 
 	
 
 	createRooms(zuulRooms);
+	
 
 	for (int i = 0; i < 3; i++) {//sets all rooms to false
 		//zuulRooms[i]= new ZuulRoom();
@@ -37,6 +37,7 @@ int main() {
 	
 	std::cout << "Greetings adventurer, you wake up in the castle of Neet, ruled by the most"
 			<<" dangerous being in the universe, Neet the Dark Sorcerer! To escape you must defeat him."
+			<<"\n Dont forgot to pick up items in rooms with 'pickup'!"
 			<< "\nGood luck laddie!" << std::endl;
 	
 	while(true){
@@ -53,7 +54,7 @@ int main() {
 
 }
 
-bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem* inv){
+bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem** inv){
 	ZuulRoom currentR = getCurrentRoom(inRoom, zR);
 	int originX = 0;
 	int originY = 0;
@@ -75,13 +76,13 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem* inv){
 		std::cout << "Inv: Prints the inventory of the player. You can also press 'i' to accomplish this."<< std::endl;
 		std::cout << "Exit: Exits the game."<< std::endl;
 		std::cout << "___________________________________________" << std::endl;
+		std::cin.clear();
 		std::cin.ignore();
 		
 	}else if(strcasecmp(input, "west") == 0){//add maps at somepoint
 		if(checkPossible(originX, -1, 'x')){//checks if the location you want to move to is valid
 			
 			bool passed = false;
-			
 			for(int x = 0; x < 4; x++){
 				if(zR[originX - 1][originY].getEntrances()[x] == 'e'){
 					passed = true;
@@ -93,23 +94,28 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem* inv){
 			bool passedAgain = false;//checks if the 
 			
 			if(passed){//checks if you can enter the room from this way
-			std::cout<< "true";
-				if(currentR.getCanEnter()){
+				std::cout<< (zR[originX - 1][originY].getEnterItem())->checkValid();
+				if((zR[originX - 1][originY].getEnterItem())->checkValid() != 1){
+					
 					passedAgain = true;
 				}else{
 					for(int x = 0; x < 6; x++){
-						if(inv[x].getName() ==  (currentR.getEnterItem())->getName()){
+						if(inv[x]->getName() ==  (zR[originX - 1][originY].getEnterItem())->getName()){
+							
 							passedAgain = true;
-							ZuulItem* tmp = new ZuulItem();
-							inv[x] = *tmp;
+							inv[x] = new ZuulItem();
 							zR[originX - 1][originY].setCanEnter(true);
 						}
 					}
 				}
+			}else{
+				std::cout << std::endl <<"\e[1mCan't enter this way.\e[0m" << std::endl;
 			}
 			
 			if(passedAgain){//if you dont need an item to enter or have the item to enter
 				moveRoom(originX - 1, originY, inRoom);
+			}else{
+				std::cout << std::endl << "\e[1mYou don't have the necessary item to open this room!\e[0m"<< std::endl;
 			}
 		}
 	}else if(strcasecmp(input, "east") == 0){
@@ -127,22 +133,26 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem* inv){
 			bool passedAgain = false;//checks if the 
 			
 			if(passed){//checks if you can enter the room from this way
-				if(currentR.getCanEnter()){
+				if(zR[originX + 1][originY].getCanEnter()){
 					passedAgain = true;
 				}else{
 					for(int x = 0; x < 6; x++){
-						if(inv[x].getName() ==  (currentR.getEnterItem())->getName()){
+						if(inv[x]->getName() ==  (zR[originX + 1][originY].getEnterItem())->getName()){
 							passedAgain = true;
 							ZuulItem* tmp = new ZuulItem();
-							inv[x] = *tmp;
+							inv[x] = tmp;
 							zR[originX + 1][originY].setCanEnter(true);// cahnge this
 						}
 					}
 				}
+			}else{
+				std::cout << std::endl <<"\e[1mCan't enter this way.\e[0m" << std::endl;
 			}
 			
 			if(passedAgain){//if you dont need an item to enter or have the item to enter
 				moveRoom(originX + 1, originY, inRoom);//cahnge this
+			}else{
+				std::cout << std::endl << "\e[1mYou don't have the necessary item to open this room!\e[0m"<< std::endl;
 			}
 		}
 	}else if(strcasecmp(input, "north") == 0){
@@ -160,22 +170,26 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem* inv){
 			bool passedAgain = false;//checks if the 
 			
 			if(passed){//checks if you can enter the room from this way
-				if(currentR.getCanEnter()){
+				if(zR[originX][originY - 1].getCanEnter()){
 					passedAgain = true;
 				}else{
 					for(int x = 0; x < 6; x++){
-						if(inv[x].getName() ==  (currentR.getEnterItem())->getName()){
+						if(inv[x]->getName() ==  (zR[originX][originY - 1].getEnterItem())->getName()){
 							passedAgain = true;
 							ZuulItem* tmp = new ZuulItem();
-							inv[x] = *tmp;
+							inv[x] = tmp;
 							zR[originX][originY -1 ].setCanEnter(true);// cahnge this
 						}
 					}
 				}
+			}else{
+				std::cout << std::endl <<"\e[1mCan't enter this way.\e[0m" << std::endl;
 			}
 			
 			if(passedAgain){//if you dont need an item to enter or have the item to enter
 				moveRoom(originX, originY - 1, inRoom);//cahnge this
+			}else{
+				std::cout << std::endl << "\e[1mYou don't have the necessary item to open this room!\e[0m"<< std::endl;
 			}
 		}
 	}else if(strcasecmp(input, "south") == 0){
@@ -183,7 +197,9 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem* inv){
 			bool passed = false;
 			
 			for(int x = 0; x < 4; x++){
+				//std::cout << zR[originX][originY +1].getEntrances();
 				if(zR[originX][originY +1].getEntrances()[x] == 'n'){//change this 
+					//std::cout<< "test";
 					passed = true;
 					break;
 				}else if(zR[originX][originY + 1].getEntrances()[x] == '\0'){//change this
@@ -193,36 +209,38 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem* inv){
 			bool passedAgain = false;//checks if the 
 			
 			if(passed){//checks if you can enter the room from this way
-				if(currentR.getCanEnter()){
+				//std::cout<< "test";
+				if(zR[originX][originY + 1].getCanEnter()){
 					passedAgain = true;
 				}else{
 					for(int x = 0; x < 6; x++){
-						if(inv[x].getName() ==  (currentR.getEnterItem())->getName()){
+						if(inv[x]->getName() ==  (zR[originX][originY + 1].getEnterItem())->getName()){
 							passedAgain = true;
 							ZuulItem* tmp = new ZuulItem();
-							inv[x] = *tmp;
+							inv[x] = tmp;
 							zR[originX][originY + 1].setCanEnter(true);// cahnge this
 						}
 					}
 				}
 			}else{
-				std::cout << "Can't enter this way.";
+				std::cout << std::endl <<"\e[1mCan't enter this way.\e[0m" << std::endl;
 			}
 			
 			if(passedAgain){//if you dont need an item to enter or have the item to enter
 				
 				moveRoom(originX, originY + 1, inRoom);//cahnge this
 			}else{
-				std::cout << "You don't have the necessary item to open this room!";
+				std::cout << std::endl << "\e[1mYou don't have the necessary item to open this room!\e[0m"<< std::endl;
 			}
 		}
 	}else if(strcasecmp(input, "inv") == 0){//finished
 	
 		bool ranOnce = false;
 		for(int x = 0; x < 6; x++){
-			if(inv[x].checkValid()){//checks if item is an item
+			if(inv[x]->checkValid()){//checks if item is an item
+				std::cout<< "Valid" << std::endl;
 				ranOnce =true;
-				std::cout << inv[x].getName() << std::endl << inv[x].getDesc() << std::endl;
+				std::cout << inv[x]->getName() << std::endl << inv[x]->getDesc() << std::endl;
 				
 			}
 		}
@@ -233,6 +251,31 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem* inv){
 		
 	}else if(strcasecmp(input, "exit") == 0){//finished
 		exit(0);
+	}else if(strcasecmp(input, "pickup") == 0){
+		for(int x = 0; x < 6; x++){
+			if(!inv[x]->checkValid()){
+				if(currentR.getContainedItem()->checkValid()){
+					int tX = 0;
+					int tY = 0;
+					
+					for (int i = 0; i < 3; i++) {
+						for (int j = 0; j < 6; j++) {
+							if(inRoom[i][j]){
+								tX = i;
+								tY = j;
+							}
+						}
+					}
+					ZuulItem* clone = new ZuulItem((currentR.getContainedItem())->getName(), (currentR.getContainedItem())->getDesc(), (currentR.getContainedItem())->getRoomText());
+					inv[x]= clone;
+					ZuulItem* tmp =  new ZuulItem();
+					zR[tX][tY].setContainedItem(tmp);
+					char* c = (clone->getName());
+					//std::cout<< c << std::endl;
+					fflush(stdin);
+				}
+			}
+		}
 	}
 }
 
@@ -241,7 +284,7 @@ void printMap(bool** inRoom, ZuulRoom** zR){
 	for(int x = 0; x < 3; x++){
 		ZuulRoom* tmp = zR[x];//gets the array of with a specific x coordinate(0, 1, 2)
 		for(int y = 0; y < 6; y++){
-			if(inRoom[x][y]){//moves to the correct room by going through y values of the x list
+			if(inRoom[x][y]){//moves to the correct room by going through y values of the x list, also bolds the roomname
 				std::cout << std::endl << "Current Room: "<< "\e[1m"<<(tmp[y]).getName() << "\e[0m" << ", Type 'help' the list of commands" << std::endl;
 				
 				std::cout << std::endl << tmp[y].getDesc() << std::endl;
@@ -252,6 +295,15 @@ void printMap(bool** inRoom, ZuulRoom** zR){
 			
 		}
 	}
+
+	if((getCurrentRoom(inRoom, zR).getContainedItem())->checkValid()){
+		
+		std::cout << (getCurrentRoom(inRoom, zR).getContainedItem())->getRoomText() << std::endl;
+	}
+	
+	
+	
+	
 	std::cout<< "\n"
 	<< '[' << charMap[0][0] << ']' << '[' << charMap[1][0] << ']' << '[' << charMap[2][0] << ']' << std::endl
 	<< '[' << charMap[0][1] << ']' << '[' << charMap[1][1] << ']' << '[' << charMap[2][1] << ']' << std::endl
@@ -273,7 +325,7 @@ void moveRoom(int changeX, int changeY, bool** inRoom){
 	}
 	
 	inRoom[changeX][changeY] = true;
-	std::cout <<  "inRoom[" << changeX << ']' << '[' << changeY << "] = " << inRoom[changeX][changeY];
+	//std::cout <<  "inRoom[" << changeX << ']' << '[' << changeY << "] = " << inRoom[changeX][changeY];
 }
 
 
@@ -281,10 +333,9 @@ bool checkPossible(int loc, int math, char plane) { //checks if location is with
 	int newLoc = loc + math;//this is the wanted location
 	int axisNum; //axis num is the max of the plane given
 	if ('y' == plane) {//checks if plane is y or x, plane is the plane the player is located
-		std::cout << plane;
-		axisNum = 3;
-	} else {
 		axisNum = 6;
+	} else {
+		axisNum = 3;
 	}
 	if (newLoc > axisNum || newLoc < 0 == true) {
 		return false;
@@ -296,7 +347,7 @@ ZuulRoom getCurrentRoom(bool** inRoom, ZuulRoom** zuulRooms){
 	for (int i = 0; i < 3; i++) {
 		for (int j = 0; j < 6; j++) {
 			if(inRoom[i][j]){
-				return zuulRooms[i][j];
+				return (zuulRooms[i][j]);
 			}
 		}
 	}
@@ -345,7 +396,7 @@ void createRooms(ZuulRoom** zuulRooms) {//creates rooms and adds them to zuulRoo
 	
 	
 	char entrance[] = {'w', 'e', 's'};
-	char* entrances = entrance;
+	char* entrances = "wes";
 	char* a = new char[300];
 	char* b = new char[300];
 	strcpy(a, "Hallway 1");
@@ -354,7 +405,7 @@ void createRooms(ZuulRoom** zuulRooms) {//creates rooms and adds them to zuulRoo
 	
 	
 	char entrance1[] = {'w'};
-	char* entrances1 = entrance1;
+	char* entrances1 = "w";
 	char* c = new char[300];
 	char* d = new char[300];
 	strcpy(c, "Pink Room");
@@ -363,7 +414,7 @@ void createRooms(ZuulRoom** zuulRooms) {//creates rooms and adds them to zuulRoo
 	
 	
 	char entrance2[] = {'n', 'w', 'e', 's'};
-	char* entrances2 = entrance2;
+	char* entrances2 = "nwes";
 	char* e = new char[300];
 	char* f = new char[300];
 	strcpy(e, "Hallway 2");
@@ -372,7 +423,7 @@ void createRooms(ZuulRoom** zuulRooms) {//creates rooms and adds them to zuulRoo
 	
 	
 	char entrance3[] = {'n', 'w', 'e', 's'};
-	char* entrances3 = entrance3;
+	char* entrances3 = "nwes";
 	char* g = new char[300];
 	char* h = new char[300];
 	strcpy(g, "Hallway 3");
@@ -381,24 +432,24 @@ void createRooms(ZuulRoom** zuulRooms) {//creates rooms and adds them to zuulRoo
 	
 
 	char entrance4[] = {'n', 'w', 'e', 's'};
-	char* entrances4 = entrance4;
+	char* entrances4 = "nwes";
 	char* i = new char[300];
 	char* j = new char[400];
 	strcpy(i, "Hallway 4");
 	strcpy(j, "This hallway is great actually, the tiles are solid gold and the lights above head are now crystal chandeliers. To the WEST is small dungeon, however there is guard blocking the entrance. You'll need some sort of dungeon membership to pass through. To the EAST is a room used for torture, to the SOUTH is what looks like a menacing hallway.\n");
-	ZuulRoom* hall4 = new ZuulRoom(i, j,entrances4);
+	ZuulRoom* hall4 = new ZuulRoom(i, j, "news");
 	
 	
 	
 	char entrance5[] = {'n', 'w', 'e', 's'};
-	char* entrances5 = entrance5;
+	char* entrances5 = "nwes";
 	
 	ZuulRoom* hall5 = new ZuulRoom("Hallway 5", "As you enter this hallway the lights turn off completely. Then torches along the wall magically turn light up, and a voice shouts out,'puny human, do you dare to face the might of Neet?', 'if so please find the key to the door to the SOUTH. Thanks :)' To the SOUTH is a massive door made of bones and souls of defeated challengers, to the WEST is an armory filled with all sorts of dangerous objects, to the SOUTH is the legal department, the most vile room of them all.\n"
-	, entrances5);
+	, "swen");
 
 	
 	char entrance6[] = {'e'};
-	char* entrances6 = entrance6;
+	char* entrances6 = "e";
 	
 	ZuulItem* jKey = new ZuulItem("Janitor's Key",
 			"I think you can figure out what this is for.", "You can see a key on top of one of the desks.");
@@ -409,14 +460,14 @@ void createRooms(ZuulRoom** zuulRooms) {//creates rooms and adds them to zuulRoo
 			"A hammer worn down over by years of use. Looks strong enough to break a weak lock.", "You can see a shabby looking hammer under a few sketchy magazines.");
 	
 	char entrance7[] = {'e'};
-	char* entrances7 = entrance7;		
+	char* entrances7 = "e";		
 			
 	ZuulRoom* janitorC = new ZuulRoom("Janitor's Closet", "A closet that is used by a janitor, full of exciting cleaning supplies and dirty rags.",
 	false, jKey, hammer, entrances7);
 	
 	
 	char entrance8[] = {'e'};
-	char* entrances8 = entrance8;
+	char* entrances8 = "e";
 	
 	ZuulItem* disguise = new ZuulItem("Woman's Disguise", "A lovely wig along with a makeup kit. Has potential to transform you into a pretty lady!", "You can see a wig next to some makeup. Looks like some unfortunate person forget it here. Might be useful when getting into the Girl's Bathroom.");
 	ZuulRoom* copyR = new ZuulRoom("Copyroom", "A copyroom with a basic copier. Exciting stuff.", false,
@@ -425,7 +476,7 @@ void createRooms(ZuulRoom** zuulRooms) {//creates rooms and adds them to zuulRoo
 	
 	
 	char entrance9[] = {'w'};
-	char* entrances9 = entrance9;		
+	char* entrances9 = "w";		
 	
 	ZuulRoom* boysB = new ZuulRoom("Boys Bathroom", "Your average boys bathroom, full of filth and dirt everywhere. Unfortunately there isn't anything or anyone in here.",
 	entrances9);
@@ -433,7 +484,7 @@ void createRooms(ZuulRoom** zuulRooms) {//creates rooms and adds them to zuulRoo
 	ZuulItem* dungeonM = new ZuulItem("Dungeon Membership", "A Membership to enter the modernized, Neet's dungeon!", "You can see a membership card to something on the ground.");
 	
 	char entrance10[] = {'w'};
-	char* entrances10 = entrance10;		
+	char* entrances10 = "w";		
 	
 	ZuulRoom* girlsB = new ZuulRoom("Girls Bathroom", "The dreaded girls bathroom. The girls in here look at you suspiciously but they don't say anything. ",
 			false, disguise, dungeonM, entrances10);
@@ -442,7 +493,7 @@ void createRooms(ZuulRoom** zuulRooms) {//creates rooms and adds them to zuulRoo
 	ZuulItem* legalKey = new ZuulItem("Legal D. Key", "A key used to unlock the legal department. It is covered in blood.", "You can see a key in here, unfortunately for you it is covered in blood. :(");
 	
 	char entrance11[] = {'e'};
-	char* entrances11 = entrance11;		
+	char* entrances11 = "e";		
 	
 	ZuulRoom* sDungeon = new ZuulRoom("Small Dungeon", "A lovely dungeon installed with the latest tools for torturing you enemies! It has beautiful wooden floors and a futuristic torture instruments that are coated in a thick layer of blood." 
 	,false, dungeonM, legalKey, entrances11);
@@ -450,7 +501,7 @@ void createRooms(ZuulRoom** zuulRooms) {//creates rooms and adds them to zuulRoo
 	
 	
 	char entrance12[] = {'w'};
-	char* entrances12 = entrance12;		
+	char* entrances12 = "w";		
 	
 	ZuulRoom* legalD = new ZuulRoom("Legal Department", "The most despicable room in the dungeon by far. This room is filled with lawyers who all keep trying to buy your soul from you. Strange. There seems to be a large door towards the SOUTH that leads to the bosses office.",
 	false, legalKey, entrances12);
@@ -459,7 +510,7 @@ void createRooms(ZuulRoom** zuulRooms) {//creates rooms and adds them to zuulRoo
 	ZuulItem* armoryKey = new ZuulItem("Armory Key", "Hmm I wonder what this could be for.", "You should probably grab the key from this guy.");
 	
 	char entrance13[] = {'n'};
-	char* entrances13 = entrance13;		
+	char* entrances13 = "n";		
 	
 	ZuulRoom* legalD2 = new ZuulRoom("Big Lawyer's Domain", "There is a very big lawyer in here unfortunately. He says, 'Hey there, you seem new to these parts. You must be an adventurer right? Well I'm tired of that guy Neet,  he keeps getting in the way of some important business deals of mine. Here GRAB this key and use it to get some weapons from the armory. I'm sure that'll be plenty to get rid of him.'",
 	armoryKey, entrances13);
@@ -467,14 +518,14 @@ void createRooms(ZuulRoom** zuulRooms) {//creates rooms and adds them to zuulRoo
 	
 	
 	char entrance14[] = {'w'};
-	char* entrances14 = entrance14;		
+	char* entrances14 = "w";		
 	
 	ZuulRoom* tRoom = new ZuulRoom("Torture Room", "This is a very bizarre torture room. Instead of torture instruments there are fluffy stuffed animals instead. There doesn't seem to be anything in here.",
 	entrances14);
 	
 	
 	char entrance15[] = {'e'};
-	char* entrances15 = entrance15;		
+	char* entrances15 = "e";		
 	
 	ZuulRoom* armory = new ZuulRoom("Armory", "An armory, how cool! Looks like all the items in here are guarded by stern looking soldiers. Maybe, you'll have better luck in the office to the SOUTH?",
 	false, armoryKey, entrances15);
@@ -483,14 +534,14 @@ void createRooms(ZuulRoom** zuulRooms) {//creates rooms and adds them to zuulRoo
 	ZuulItem* bigZ = new ZuulItem("Big Z", "A massive rocket launcher, that should be able to pierce its way into Neet's throneroom.", "You should probably pick that rocket launcher up.");
 	
 	char entrance16[] = {'n'};
-	char* entrances16 = entrance16;		
+	char* entrances16 = "n";		
 	
 	ZuulRoom* armory2 = new ZuulRoom("Armory Office", "There are weapons in here! From assault rifles to rocket launchers, this room has it all! However, the most dangerous looking one is a massive rocket launcher called the BIG Z. This should get the job done.",
 	bigZ, entrances16);
 	
 	
 	char entrance17[] = {'n'};
-	char* entrances17 = entrance17;		
+	char* entrances17 = "n";		
 	
 	ZuulRoom* bRoom = new ZuulRoom("THE BOSS", "The door explodes into a heap of rotting  and you enter the throne room. The lights suddenly turn on overhead. 'FOOL YOU THINK YOU CAN CHALLENGE ME?? MHUAHAHUUAHAHHAUA PREPARE TO DIE.' The fight commences and you launch a rocket at the Great Neet. He dies instantly. Wow that was easy. You pat yourself on the back and go out the back door. You begin heading home.",
 	true, false, bigZ, entrances17);
@@ -531,4 +582,5 @@ void createRooms(ZuulRoom** zuulRooms) {//creates rooms and adds them to zuulRoo
 	//ZuulRoom* zz3 = z3;
 	zuulRooms[2] = z3;
 
+	
 }

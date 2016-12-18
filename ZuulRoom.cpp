@@ -9,7 +9,7 @@ ZuulRoom::ZuulRoom() {
     ZuulItem* enterItem = new ZuulItem();
     ZuulItem* containedItem = new ZuulItem();
 	
-    entrances = new char[4];// N1, S2, W3, E4 
+    entrances = new char[5];// N1, S2, W3, E4 
     winGame = false;
 	
 	for(int x = 0; x < 4; x++){//initializes arrays 
@@ -30,6 +30,7 @@ ZuulRoom::ZuulRoom(char* name, char* desc, bool canEnt, ZuulItem* enter, char* e
 	description = desc;
 	canEnter = canEnt;
 	enterItem = enter;
+	containedItem = new ZuulItem();
 	entrances = ent;
         
 }
@@ -38,6 +39,7 @@ ZuulRoom::ZuulRoom(char* name, char* desc, bool wonG, bool canEnt, ZuulItem* ent
 	description = desc;
 	canEnter = canEnt;
 	enterItem = enter;
+	containedItem = new ZuulItem();
 	entrances = ent;
 	winGame = true;
 	
@@ -46,6 +48,7 @@ ZuulRoom::ZuulRoom(char* name, char* desc, ZuulItem* contItem, char* ent){//room
 	roomName = name;
 	description = desc;
 	containedItem = contItem;
+	enterItem = new ZuulItem();
 	entrances = ent;
 	
 }
@@ -53,6 +56,8 @@ ZuulRoom::ZuulRoom(char* name, char* desc, char* ent){ //basic room
 	roomName = name;
 	description = desc;
 	entrances= ent;
+	containedItem = new ZuulItem();
+	enterItem = new ZuulItem();
 }
 ZuulRoom::ZuulRoom(char* name){//creates placeholder room
 	roomName =  name;
@@ -74,6 +79,14 @@ bool ZuulRoom::getCanEnter(){
 }
 ZuulItem* ZuulRoom::getEnterItem(){
 	return enterItem;
+}
+
+ZuulItem* ZuulRoom::getContainedItem(){
+	return containedItem;
+}
+
+void ZuulRoom::setContainedItem(ZuulItem* zI){
+	containedItem = zI;
 }
 
 void ZuulRoom:: setCanEnter(bool canEnt){

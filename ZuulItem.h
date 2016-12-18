@@ -20,19 +20,3 @@ class ZuulItem
 		bool checkValid();
 };
 #endif
-/*
- Refrigerator()
-    :amountOfEggs(0)
-    {
-    };
-  // Custom constructor
-  Refrigerator(int amountOfEggs)
-    :amountOfEggs(amountOfEggs)
-    {
-    };
-
-
-
-
-
-*/
