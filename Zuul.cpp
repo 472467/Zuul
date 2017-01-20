@@ -11,13 +11,21 @@ int main() {
 	
 	bool** inRoom = new bool*[6];//default variables 6x3
 	bool** neighbors = new bool*[6]; //6x3
+	
 	ZuulRoom** zuulRooms =new ZuulRoom*[6];//6x 3y
 	bool gameWon = false;//HAVE YOU WON THE GAME PUNK
 	ZuulItem** inventory = new ZuulItem*[6];//6
 
 	system("clear");//runs for sure
 	for (int i = 0; i < 6; i++) {
+<<<<<<< HEAD
+		ZuulItem* z = new ZuulItem();	
+		inventory[i] = *z;
+		neighbors[i] = new bool[3];
+		inRoom[i] = new bool[3];
+=======
 		inventory[i] = new ZuulItem();//FILLS INVENTORY WITH BLANK SPOTS
+>>>>>>> 6da6347502d2078c9990c750e98f0cf71d65dfa5
 	}
 
 	
