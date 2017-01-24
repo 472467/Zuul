@@ -34,6 +34,7 @@ int main() {
 		//zuulRooms[i]= new ZuulRoom();
 		for (int j = 0; j < 6; j++) {
 			inRoom[i][j] = false;
+			neighbors[i][j] = false;
 		}
 	}
 
@@ -61,7 +62,8 @@ int main() {
 
 bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem** inv){
 	ZuulRoom currentR = getCurrentRoom(inRoom, zR);//CURRENT ROOM
-	if(currentR.getWonGame()){//ENDS GAME YOU ARE WIN CONGRATS
+	if(currentR.getWonGame() == 1){//ENDS GAME YOU ARE WIN CONGRATS
+		std::cout<< currentR.getName();
 		std::cout << "CONGRATS YOU HAVE WON, WAY TO GO. SO LONG.";
 		std::cin.ignore();
 		exit(0);
@@ -322,16 +324,14 @@ void printMap(bool** inRoom, ZuulRoom** zR){//PRINTS MAP LOL
 	<< '[' << charMap[0][3] << ']' << '[' << charMap[1][3] << ']' << '[' << charMap[2][3] << ']' << std::endl
 	<< '[' << charMap[0][4] << ']' << '[' << charMap[1][4] << ']' << '[' << charMap[2][4] << ']' << std::endl
 	<< '[' << charMap[0][5] << ']' << '[' << charMap[1][5] << ']' << '[' << charMap[2][5] << ']' << std::endl;
-	/*
 	std::cout<< "\n"
-	<< '[' << zR[0][0].getCanEnter() << ']' << '[' << zR[1][0].getCanEnter() << ']' << '[' << zR[2][0].getCanEnter() << ']' << std::endl
-	<< '[' << zR[0][1].getCanEnter() << ']' << '[' << zR[1][1].getCanEnter() << ']' << '[' << zR[2][1].getCanEnter() << ']' << std::endl
-	<< '[' << zR[0][2].getCanEnter() << ']' << '[' << zR[1][2].getCanEnter() << ']' << '[' << zR[2][2].getCanEnter() << ']' << std::endl
-	<< '[' << zR[0][3].getCanEnter() << ']' << '[' << zR[1][3].getCanEnter() << ']' << '[' << zR[2][3].getCanEnter() << ']' << std::endl
-	<< '[' << zR[0][4].getCanEnter() << ']' << '[' << zR[1][4].getCanEnter() << ']' << '[' << zR[2][4].getCanEnter() << ']' << std::endl
-	<< '[' << zR[0][5].getCanEnter() << ']' << '[' << zR[1][5].getCanEnter() << ']' << '[' << zR[2][5].getCanEnter() << ']' << std::endl;
-	*/
-	
+	<< '[' << zR[0][0].getWonGame() << ']' << '[' << zR[1][0].getWonGame() << ']' << '[' << zR[2][0].getWonGame() << ']' << std::endl
+	<< '[' << zR[0][1].getWonGame() << ']' << '[' << zR[1][1].getWonGame() << ']' << '[' << zR[2][1].getWonGame() << ']' << std::endl
+	<< '[' << zR[0][2].getWonGame() << ']' << '[' << zR[1][2].getWonGame() << ']' << '[' << zR[2][2].getWonGame() << ']' << std::endl
+	<< '[' << zR[0][3].getWonGame() << ']' << '[' << zR[1][3].getWonGame() << ']' << '[' << zR[2][3].getWonGame() << ']' << std::endl
+	<< '[' << zR[0][4].getWonGame() << ']' << '[' << zR[1][4].getWonGame() << ']' << '[' << zR[2][4].getWonGame() << ']' << std::endl
+	<< '[' << zR[0][5].getWonGame() << ']' << '[' << zR[1][5].getWonGame() << ']' << '[' << zR[2][5].getWonGame() << ']' << std::endl;
+
 }
 
 void moveRoom(int changeX, int changeY, bool** inRoom){//MOVES ROOM
