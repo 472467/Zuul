@@ -18,14 +18,11 @@ int main() {
 
 	system("clear");//runs for sure
 	for (int i = 0; i < 6; i++) {
-<<<<<<< HEAD
 		ZuulItem* z = new ZuulItem();	
-		inventory[i] = *z;
+		inventory[i] = z;
 		neighbors[i] = new bool[3];
 		inRoom[i] = new bool[3];
-=======
 		inventory[i] = new ZuulItem();//FILLS INVENTORY WITH BLANK SPOTS
->>>>>>> 6da6347502d2078c9990c750e98f0cf71d65dfa5
 	}
 
 	
@@ -325,7 +322,7 @@ void printMap(bool** inRoom, ZuulRoom** zR){//PRINTS MAP LOL
 	<< '[' << charMap[0][3] << ']' << '[' << charMap[1][3] << ']' << '[' << charMap[2][3] << ']' << std::endl
 	<< '[' << charMap[0][4] << ']' << '[' << charMap[1][4] << ']' << '[' << charMap[2][4] << ']' << std::endl
 	<< '[' << charMap[0][5] << ']' << '[' << charMap[1][5] << ']' << '[' << charMap[2][5] << ']' << std::endl;
-	
+	/*
 	std::cout<< "\n"
 	<< '[' << zR[0][0].getCanEnter() << ']' << '[' << zR[1][0].getCanEnter() << ']' << '[' << zR[2][0].getCanEnter() << ']' << std::endl
 	<< '[' << zR[0][1].getCanEnter() << ']' << '[' << zR[1][1].getCanEnter() << ']' << '[' << zR[2][1].getCanEnter() << ']' << std::endl
@@ -333,7 +330,7 @@ void printMap(bool** inRoom, ZuulRoom** zR){//PRINTS MAP LOL
 	<< '[' << zR[0][3].getCanEnter() << ']' << '[' << zR[1][3].getCanEnter() << ']' << '[' << zR[2][3].getCanEnter() << ']' << std::endl
 	<< '[' << zR[0][4].getCanEnter() << ']' << '[' << zR[1][4].getCanEnter() << ']' << '[' << zR[2][4].getCanEnter() << ']' << std::endl
 	<< '[' << zR[0][5].getCanEnter() << ']' << '[' << zR[1][5].getCanEnter() << ']' << '[' << zR[2][5].getCanEnter() << ']' << std::endl;
-	
+	*/
 	
 }
 
