@@ -43,10 +43,13 @@ int main() {
 	
 	std::cout << "Greetings adventurer, you wake up in the castle of Neet, ruled by the most"
 			<<" dangerous being in the universe, Neet the Dark Sorcerer! To escape you must defeat him."
-			<<"\n Dont forgot to pick up items in rooms with 'pickup'!"
-			<< "\nGood luck laddie!" << std::endl;
+			<<"\n Dont forgot to pick up items in rooms with 'pickup' and make sure to read the 'help' command!"
+			<< "\nGood luck laddie!"
+			<< "\n\nYou have a feeling that items will break when you use them to open a room...\n\n"
+			<< std::endl;
 	
 	while(true){
+		//system("clear");
 		
 		printMap(inRoom, zuulRooms);//THIS PRINTS THE MAP
 		
@@ -63,7 +66,7 @@ int main() {
 bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem** inv){
 	ZuulRoom currentR = getCurrentRoom(inRoom, zR);//CURRENT ROOM
 	if(currentR.getWonGame() == 1){//ENDS GAME YOU ARE WIN CONGRATS
-		std::cout<< currentR.getName();
+		
 		std::cout << "CONGRATS YOU HAVE WON, WAY TO GO. SO LONG.";
 		std::cin.ignore();
 		exit(0);
@@ -86,6 +89,8 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem** inv){
 		std::cout << "All these commands are case insensitive." << std::endl << std::endl;
 		std::cout << "West, North, East, South: type these to move the player in the corresponding direction. The arrow keys can also be used to accomplish this." << std::endl;
 		std::cout << "Inv: Prints the inventory of the player. You can also press 'i' to accomplish this."<< std::endl;
+		std::cout << "Pickup: This picks up all items in a room." << std::endl;
+		std::cout << "Drop: This drops an item of your choice from your inventory. Items are destroyed when using them to open a room." << std::endl;
 		std::cout << "Exit: Exits the game."<< std::endl;
 		std::cout << "___________________________________________" << std::endl;
 		std::cin.clear();
@@ -289,6 +294,59 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem** inv){
 				}
 			}
 		}
+		ZuulItem** dItems = (getCurrentRoom(inRoom, zR)).getDroppedItems();
+		for(int x = 0; x < 10; x++){
+			if(dItems[x]->checkValid()){
+				for(int y = 0; y < 6; y++){
+					if(inv[y]->checkValid() == false){
+						inv[y] = getCurrentRoom(inRoom, zR).pickupDroppedItem((dItems[x]->getName()));
+						//ZuulItem* pickupDroppedItem(char* iName);
+					}
+				}
+			}
+		}
+		
+	}else if(strcasecmp(input, "drop") == 0){
+		std::cout << "\nWhich item would you like to drop(input item number)?\n";
+		bool ranOnce = false;
+		int count = 0;
+		for(int x = 0; x < 6; x++){
+			if(inv[x]->checkValid()){//checks if item is an item
+				ranOnce =true;
+				std::cout << std::endl << "[" << count << "] " <<inv[x]->getName() << std::endl << inv[x]->getDesc() << std::endl;//PRINTS NAME AND DESC
+				count++;
+			}
+		}
+		if(!ranOnce){
+			std::cout<< "No items." << std::endl;
+		}
+		char* in = new char[50];
+		std::cin.getline(in,100);
+		std::stringstream ss(in);//converts input to an int, to avoid that error
+		int delID = 0;
+		ss >> delID;
+		count = 0;
+		for(int x = 0; x < 6; x++){
+			if(inv[x]->checkValid() && count == delID){
+				
+				getCurrentRoom(inRoom, zR).addDroppedItem(inv[x]);
+				inv[x] = new ZuulItem();
+				break;
+			}else if(inv[x]->checkValid()){
+				count++;
+			}
+		}
+		
+	}else{
+		std::cout << "\nCOMMAND NOT RECOGNIZED\n";
+	}
+	
+	ZuulRoom currentR = getCurrentRoom(inRoom, zR);//CURRENT ROOM
+	if(currentR.getWonGame() == 1){//ENDS GAME YOU ARE WIN CONGRATS
+		
+		std::cout << "CONGRATS YOU HAVE WON, WAY TO GO. SO LONG.";
+		std::cin.ignore();
+		exit(0);
 	}
 }
 
@@ -313,9 +371,25 @@ void printMap(bool** inRoom, ZuulRoom** zR){//PRINTS MAP LOL
 		
 		std::cout << (getCurrentRoom(inRoom, zR).getContainedItem())->getRoomText() << std::endl;
 	}
-	
-	
-	
+	/*
+	ZuulItem** dItems = (getCurrentRoom(inRoom, zR)).getDroppedItems();
+	bool ranOnce = false;
+	for(int x = 0; x < 10; x++){
+		if(dItems[x]->checkValid()){//checks if item is an item
+			ranOnce =true;
+			std::cout << std::endl <<dItems[x]->getName() << std::endl << dItems[x]->getDesc() << std::endl;//PRINTS NAME AND DESC
+			
+		}
+	}
+	if(!ranOnce){
+		std::cout<< "No items." << std::endl;
+	}
+	for(int x = 0; x < 10; x++){
+		if(dItems[x]->checkValid()){
+			std::cout << dItems[x]->getRoomText() << std::endl;
+		}
+	}
+	*/
 	
 	std::cout<< "\n"
 	<< '[' << charMap[0][0] << ']' << '[' << charMap[1][0] << ']' << '[' << charMap[2][0] << ']' << std::endl
@@ -324,13 +398,15 @@ void printMap(bool** inRoom, ZuulRoom** zR){//PRINTS MAP LOL
 	<< '[' << charMap[0][3] << ']' << '[' << charMap[1][3] << ']' << '[' << charMap[2][3] << ']' << std::endl
 	<< '[' << charMap[0][4] << ']' << '[' << charMap[1][4] << ']' << '[' << charMap[2][4] << ']' << std::endl
 	<< '[' << charMap[0][5] << ']' << '[' << charMap[1][5] << ']' << '[' << charMap[2][5] << ']' << std::endl;
-	std::cout<< "\n"
+	
+	/*std::cout<< "\n"
 	<< '[' << zR[0][0].getWonGame() << ']' << '[' << zR[1][0].getWonGame() << ']' << '[' << zR[2][0].getWonGame() << ']' << std::endl
 	<< '[' << zR[0][1].getWonGame() << ']' << '[' << zR[1][1].getWonGame() << ']' << '[' << zR[2][1].getWonGame() << ']' << std::endl
 	<< '[' << zR[0][2].getWonGame() << ']' << '[' << zR[1][2].getWonGame() << ']' << '[' << zR[2][2].getWonGame() << ']' << std::endl
 	<< '[' << zR[0][3].getWonGame() << ']' << '[' << zR[1][3].getWonGame() << ']' << '[' << zR[2][3].getWonGame() << ']' << std::endl
 	<< '[' << zR[0][4].getWonGame() << ']' << '[' << zR[1][4].getWonGame() << ']' << '[' << zR[2][4].getWonGame() << ']' << std::endl
 	<< '[' << zR[0][5].getWonGame() << ']' << '[' << zR[1][5].getWonGame() << ']' << '[' << zR[2][5].getWonGame() << ']' << std::endl;
+	*/
 
 }
 
@@ -520,7 +596,7 @@ void createRooms(ZuulRoom** zuulRooms) {//creates rooms and adds them to zuulRoo
 	
 	
 	char entrance12[] = {'w'};
-	char* entrances12 = "w";		
+	char* entrances12 = "ws";		
 	
 	ZuulRoom* legalD = new ZuulRoom("Legal Department", "The most despicable room in the dungeon by far. This room is filled with lawyers who all keep trying to buy your soul from you. Strange. There seems to be a large door towards the SOUTH that leads to the bosses office.",
 	false, legalKey, entrances12);
@@ -544,7 +620,7 @@ void createRooms(ZuulRoom** zuulRooms) {//creates rooms and adds them to zuulRoo
 	
 	
 	char entrance15[] = {'e'};
-	char* entrances15 = "e";		
+	char* entrances15 = "es";		
 	
 	ZuulRoom* armory = new ZuulRoom("Armory", "An armory, how cool! Looks like all the items in here are guarded by stern looking soldiers. Maybe, you'll have better luck in the office to the SOUTH?",
 	false, armoryKey, entrances15);

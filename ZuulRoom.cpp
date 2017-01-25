@@ -15,6 +15,12 @@ ZuulRoom::ZuulRoom() {
 	for(int x = 0; x < 4; x++){//initializes arrays 
 		entrances[x] = 'x';
 	}
+	
+	droppedItems = new ZuulItem*[10];
+	
+	for (int i = 0; i < 10; i++) {
+		droppedItems[i] = new ZuulItem();
+	}
 }
 ZuulRoom::ZuulRoom(char* name, char* desc, bool canEnt, ZuulItem* enter, ZuulItem* contItem, char* ent){//room with all 
 	roomName = name;
@@ -23,7 +29,13 @@ ZuulRoom::ZuulRoom(char* name, char* desc, bool canEnt, ZuulItem* enter, ZuulIte
 	enterItem = enter;
 	containedItem = contItem;
 	entrances = ent;
-        
+    winGame = false;
+	
+	droppedItems = new ZuulItem*[10];
+	
+	for (int i = 0; i < 10; i++) {
+		droppedItems[i] = new ZuulItem();
+	}
 }
 ZuulRoom::ZuulRoom(char* name, char* desc, bool canEnt, ZuulItem* enter, char* ent){//room with item needed to enter
 	roomName = name;
@@ -32,7 +44,13 @@ ZuulRoom::ZuulRoom(char* name, char* desc, bool canEnt, ZuulItem* enter, char* e
 	enterItem = enter;
 	containedItem = new ZuulItem();
 	entrances = ent;
-        
+    winGame = false;
+	
+	droppedItems = new ZuulItem*[10];
+	
+	for (int i = 0; i < 10; i++) {
+		droppedItems[i] = new ZuulItem();
+	}
 }
 ZuulRoom::ZuulRoom(char* name, char* desc, bool wonG, bool canEnt, ZuulItem* enter, char* ent){//boss room
 	roomName = name;
@@ -43,6 +61,11 @@ ZuulRoom::ZuulRoom(char* name, char* desc, bool wonG, bool canEnt, ZuulItem* ent
 	entrances = ent;
 	winGame = true;
 	
+	droppedItems = new ZuulItem*[10];
+	
+	for (int i = 0; i < 10; i++) {
+		droppedItems[i] = new ZuulItem();
+	}
 }
 ZuulRoom::ZuulRoom(char* name, char* desc, ZuulItem* contItem, char* ent){//room with item in it
 	roomName = name;
@@ -51,7 +74,13 @@ ZuulRoom::ZuulRoom(char* name, char* desc, ZuulItem* contItem, char* ent){//room
 	enterItem = new ZuulItem();
 	entrances = ent;
 	canEnter = true;
+	winGame = false;
 	
+	droppedItems = new ZuulItem*[10];
+	
+	for (int i = 0; i < 10; i++) {
+		droppedItems[i] = new ZuulItem();
+	}
 }
 ZuulRoom::ZuulRoom(char* name, char* desc, char* ent){ //basic room
 	roomName = name;
@@ -60,6 +89,13 @@ ZuulRoom::ZuulRoom(char* name, char* desc, char* ent){ //basic room
 	containedItem = new ZuulItem();
 	enterItem = new ZuulItem();
 	canEnter  =true;
+	winGame = false;
+	
+	droppedItems = new ZuulItem*[10];
+	
+	for (int i = 0; i < 10; i++) {
+		droppedItems[i] = new ZuulItem();
+	}
 }
 ZuulRoom::ZuulRoom(char* name){//creates placeholder room
 	roomName =  name;
@@ -67,6 +103,29 @@ ZuulRoom::ZuulRoom(char* name){//creates placeholder room
 void ZuulRoom::setEntrances(char* ent){ //sets entrances
 	entrances = ent;
 }
+void ZuulRoom::addDroppedItem(ZuulItem* item){
+	for(int x = 0; x < 10; x++){
+		if(!(droppedItems[x]->checkValid())){
+			droppedItems[x] = item;
+			break;
+		}
+	}
+}
+
+ZuulItem** ZuulRoom::getDroppedItems(){
+	return droppedItems;
+}
+
+ZuulItem* ZuulRoom::pickupDroppedItem(char* iName){
+	for(int x = 0; x < 10; x++){
+		if(droppedItems[x]->getName() == iName){
+			ZuulItem* tmpItem = droppedItems[x];
+			droppedItems[x] = new ZuulItem();
+			return tmpItem;
+		}
+	}
+}
+
 char* ZuulRoom::getEntrances(){//converts array of entrances to string and returns it
 	return entrances;
 }

@@ -12,6 +12,7 @@ class ZuulRoom
 		ZuulItem* containedItem;
 		char* entrances;
 		bool winGame;
+		ZuulItem** droppedItems;
 		
 	public:
 		ZuulRoom();
@@ -33,6 +34,9 @@ class ZuulRoom
 		ZuulItem* getContainedItem();
 		void setContainedItem(ZuulItem*);
 		bool getWonGame();
+		ZuulItem* pickupDroppedItem(char*);
+		void addDroppedItem(ZuulItem*);
+		ZuulItem** getDroppedItems();
 	
 
 };
