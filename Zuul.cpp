@@ -140,13 +140,19 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem** inv){
 		if(checkPossible(originX, 1, 'x')){
 			bool passed = false;
 			
-			for(int x = 0; x < 4; x++){
+			for(int x = 0; x < 4; x++){//seg fault here
+				
+				//std::cout << zR[originX + 1][originY].getEntrances()[x] << std::endl;
+			
 				if(zR[originX + 1][originY].getEntrances()[x] == 'w'){//change this 
+					
 					passed = true;
 					break;
 				}else if(zR[originX + 1][originY].getEntrances()[x] == '\0'){//change this
+					//std::cout << "No error here" << std::endl;
 					break;
 				}
+				
 			}
 			bool passedAgain = false;//checks if the 
 			
@@ -341,7 +347,7 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem** inv){
 		std::cout << "\nCOMMAND NOT RECOGNIZED\n";
 	}
 	
-	ZuulRoom currentR = getCurrentRoom(inRoom, zR);//CURRENT ROOM
+	currentR = getCurrentRoom(inRoom, zR);//CURRENT ROOM
 	if(currentR.getWonGame() == 1){//ENDS GAME YOU ARE WIN CONGRATS
 		
 		std::cout << "CONGRATS YOU HAVE WON, WAY TO GO. SO LONG.";
@@ -425,14 +431,14 @@ void moveRoom(int changeX, int changeY, bool** inRoom){//MOVES ROOM
 
 
 bool checkPossible(int loc, int math, char plane) { //checks if location is within grid
-	int newLoc = loc + math;//this is the wanted location
-	int axisNum; //axis num is the max of the plane given
+	int newLoc = loc + math;//this is the wanted location 3
+	int axisNum; //axis num is the max of the plane given 3
 	if ('y' == plane) {//checks if plane is y or x, plane is the plane the player is located
 		axisNum = 6;
 	} else {
 		axisNum = 3;
 	}
-	if (newLoc > axisNum || newLoc < 0 == true) {
+	if (newLoc >= axisNum || newLoc < 0 == true) {
 		return false;
 	}
 	return true;
