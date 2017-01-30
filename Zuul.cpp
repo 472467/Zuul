@@ -349,7 +349,7 @@ bool translateMove(bool** inRoom, ZuulRoom** zR, char* input, ZuulItem** inv){
 	
 	currentR = getCurrentRoom(inRoom, zR);//CURRENT ROOM
 	if(currentR.getWonGame() == 1){//ENDS GAME YOU ARE WIN CONGRATS
-		
+		std::cout <<"\n\nThe door explodes into a heap of rotting  and you enter the throne room. The lights suddenly turn on overhead. 'FOOL YOU THINK YOU CAN CHALLENGE ME?? MHUAHAHUUAHAHHAUA PREPARE TO DIE.' The fight commences and you launch a rocket at the Great Neet. He dies instantly. Wow that was easy. You pat yourself on the back and go out the back door. You begin heading home.\n"
 		std::cout << "CONGRATS YOU HAVE WON, WAY TO GO. SO LONG.";
 		std::cin.ignore();
 		exit(0);
